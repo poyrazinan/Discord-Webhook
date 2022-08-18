@@ -1,25 +1,42 @@
 # GDWebhook
- Discord Webhook library which create object and execute it.
+
+Discord Webhook library which create object and execute it.
 
 ## Usage
 
+[![Java CI with Maven](https://github.com/poyrazinan/GDWebhook/actions/workflows/maven.yml/badge.svg)](https://github.com/poyrazinan/GDWebhook/actions/workflows/maven.yml)
+[![](https://jitpack.io/v/poyrazinan/GDWebhook.svg)](https://jitpack.io/#poyrazinan/GDWebhook)
 ### Maven Repo
+
 #### Repository
 ```xml
-
+<repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+</repository>
 ```
 
 #### Dependency
 ```xml
-
+<dependency>
+    <groupId>com.github.poyrazinan</groupId>
+    <artifactId>GDWebhook</artifactId>
+    <version>1.0.0</version>
+</dependency>
 ```
 
 ### Gradle Repo
-```xml
-
+#### Repository
+```
+maven { url 'https://jitpack.io' }
+```
+#### Dependency
+```
+implementation 'com.github.poyrazinan:GDWebhook:1.0.0'
 ```
 
-### Code Example
+## Code Example
+
 * Creating object and execute
 
 ```java
@@ -46,5 +63,6 @@ public static class Test {
 }
 ```
 
-## Example
+## Photo of Webhook
+
 ![](webhookexample.png)
