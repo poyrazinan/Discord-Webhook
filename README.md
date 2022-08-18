@@ -35,7 +35,7 @@ maven { url 'https://jitpack.io' }
 implementation 'com.github.poyrazinan:GDWebhook:1.0.0'
 ```
 
-## Code Example
+### Code Example
 
 * Creating object and execute
 
