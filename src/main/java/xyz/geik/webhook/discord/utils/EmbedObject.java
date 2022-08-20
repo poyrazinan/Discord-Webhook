@@ -1,5 +1,7 @@
 package xyz.geik.webhook.discord.utils;
 
+import xyz.geik.webhook.discord.Webhook;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.List;
  * <p>
  * Dependency for Webhook
  */
-public class EmbedObject {
+public class EmbedObject implements Cloneable {
     private String title;
     private String description;
     private String url;
@@ -100,6 +102,14 @@ public class EmbedObject {
     public EmbedObject addField(String name, String value, boolean inline) {
         this.fields.add(new Field(name, value, inline));
         return this;
+    }
+
+    public EmbedObject clone() {
+        try {
+            return (EmbedObject) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public class Footer {
