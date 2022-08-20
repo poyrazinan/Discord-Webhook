@@ -39,6 +39,13 @@ public class Webhook implements Cloneable {
                 .setFooter(footer, "")
                 .setUrl(webUrl));
     }
+    public Webhook clone() {
+        try {
+            return (Webhook) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void addEmbed(EmbedObject embed) {
         this.embeds.add(embed);
