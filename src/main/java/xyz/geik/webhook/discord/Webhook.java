@@ -16,7 +16,7 @@ import java.util.List;
 
 @Setter
 @Getter
-public class Webhook {
+public class Webhook implements Cloneable {
 
     List<EmbedObject> embeds = new ArrayList<>();
 
@@ -104,8 +104,11 @@ public class Webhook {
                 for (EmbedObject embed : this.embeds) {
                     JSONObject jsonEmbed = new JSONObject();
 
-                    jsonEmbed.put("title", embed.getTitle());
-                    jsonEmbed.put("description", embed.getDescription());
+                    if (embed.getTitle() != null && !embed.getTitle().equals(""))
+                        jsonEmbed.put("title", embed.getTitle());
+
+                    if (embed.getDescription() != null && !embed.getDescription().equals(""))
+                        jsonEmbed.put("description", embed.getDescription());
                     jsonEmbed.put("url", embed.getUrl());
 
                     if (embed.getColor() != null) {
@@ -123,7 +126,7 @@ public class Webhook {
                     EmbedObject.Author author = embed.getAuthor();
                     List<EmbedObject.Field> fields = embed.getFields();
 
-                    if (footer != null) {
+                    if (footer != null && !footer.equals("")) {
                         JSONObject jsonFooter = new JSONObject();
 
                         jsonFooter.put("text", footer.getText());
@@ -131,21 +134,21 @@ public class Webhook {
                         jsonEmbed.put("footer", jsonFooter);
                     }
 
-                    if (image != null) {
+                    if (image != null && !image.equals("")) {
                         JSONObject jsonImage = new JSONObject();
 
                         jsonImage.put("url", image.getUrl());
                         jsonEmbed.put("image", jsonImage);
                     }
 
-                    if (thumbnail != null) {
+                    if (thumbnail != null && !thumbnail.equals("")) {
                         JSONObject jsonThumbnail = new JSONObject();
 
                         jsonThumbnail.put("url", thumbnail.getUrl());
                         jsonEmbed.put("thumbnail", jsonThumbnail);
                     }
 
-                    if (author != null) {
+                    if (author != null && !author.equals("")) {
                         JSONObject jsonAuthor = new JSONObject();
 
                         jsonAuthor.put("name", author.getName());
@@ -172,7 +175,8 @@ public class Webhook {
                 json.put("embeds", embedObjects.toArray());
             }
 
-            json.put("content", this.content);
+            if (this.content != null && !this.content.equals(""))
+                json.put("content", this.content);
 
             URL url = new URL(this.url);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
