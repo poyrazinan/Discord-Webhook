@@ -9,6 +9,7 @@ import javax.net.ssl.HttpsURLConnection;
 import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -93,112 +94,109 @@ public class Webhook implements Cloneable {
         return color1;
     }
 
-    public void execute() {
-        try {
-            if (this.content == null && this.embeds.isEmpty()) {
-                throw new IllegalArgumentException("Set content or add at least one EmbedObject");
-            }
+    public void execute() throws IOException {
+        if (this.content == null && this.embeds.isEmpty()) {
+            throw new IllegalArgumentException("Set content or add at least one EmbedObject");
+        }
 
-            JSONObject json = new JSONObject();
+        JSONObject json = new JSONObject();
 
-            json.put("username", this.getUserName());
-            json.put("avatar_url", this.getPhotoUrl());
-            json.put("tts", false);
+        json.put("username", this.getUserName());
+        json.put("avatar_url", this.getPhotoUrl());
+        json.put("tts", false);
 
-            if (!this.embeds.isEmpty()) {
-                List<JSONObject> embedObjects = new ArrayList<>();
+        if (!this.embeds.isEmpty()) {
+            List<JSONObject> embedObjects = new ArrayList<>();
 
-                for (EmbedObject embed : this.embeds) {
-                    JSONObject jsonEmbed = new JSONObject();
+            for (EmbedObject embed : this.embeds) {
+                JSONObject jsonEmbed = new JSONObject();
 
-                    if (embed.getTitle() != null && !embed.getTitle().equals(""))
-                        jsonEmbed.put("title", embed.getTitle());
+                if (embed.getTitle() != null && !embed.getTitle().equals(""))
+                    jsonEmbed.put("title", embed.getTitle());
 
-                    if (embed.getDescription() != null && !embed.getDescription().equals(""))
-                        jsonEmbed.put("description", embed.getDescription());
-                    jsonEmbed.put("url", embed.getUrl());
+                if (embed.getDescription() != null && !embed.getDescription().equals(""))
+                    jsonEmbed.put("description", embed.getDescription());
+                jsonEmbed.put("url", embed.getUrl());
 
-                    if (embed.getColor() != null) {
-                        Color color = embed.getColor();
-                        int rgb = color.getRed();
-                        rgb = (rgb << 8) + color.getGreen();
-                        rgb = (rgb << 8) + color.getBlue();
+                if (embed.getColor() != null) {
+                    Color color = embed.getColor();
+                    int rgb = color.getRed();
+                    rgb = (rgb << 8) + color.getGreen();
+                    rgb = (rgb << 8) + color.getBlue();
 
-                        jsonEmbed.put("color", rgb);
-                    }
-
-                    EmbedObject.Footer footer = embed.getFooter();
-                    EmbedObject.Image image = embed.getImage();
-                    EmbedObject.Thumbnail thumbnail = embed.getThumbnail();
-                    EmbedObject.Author author = embed.getAuthor();
-                    List<EmbedObject.Field> fields = embed.getFields();
-
-                    if (footer != null && !footer.equals("")) {
-                        JSONObject jsonFooter = new JSONObject();
-
-                        jsonFooter.put("text", footer.getText());
-                        jsonFooter.put("icon_url", footer.getIconUrl());
-                        jsonEmbed.put("footer", jsonFooter);
-                    }
-
-                    if (image != null && !image.equals("")) {
-                        JSONObject jsonImage = new JSONObject();
-
-                        jsonImage.put("url", image.getUrl());
-                        jsonEmbed.put("image", jsonImage);
-                    }
-
-                    if (thumbnail != null && !thumbnail.equals("")) {
-                        JSONObject jsonThumbnail = new JSONObject();
-
-                        jsonThumbnail.put("url", thumbnail.getUrl());
-                        jsonEmbed.put("thumbnail", jsonThumbnail);
-                    }
-
-                    if (author != null && !author.equals("")) {
-                        JSONObject jsonAuthor = new JSONObject();
-
-                        jsonAuthor.put("name", author.getName());
-                        jsonAuthor.put("url", author.getUrl());
-                        jsonAuthor.put("icon_url", author.getIconUrl());
-                        jsonEmbed.put("author", jsonAuthor);
-                    }
-
-                    List<JSONObject> jsonFields = new ArrayList<>();
-                    for (EmbedObject.Field field : fields) {
-                        JSONObject jsonField = new JSONObject();
-
-                        jsonField.put("name", field.getName());
-                        jsonField.put("value", field.getValue());
-                        jsonField.put("inline", field.isInline());
-
-                        jsonFields.add(jsonField);
-                    }
-
-                    jsonEmbed.put("fields", jsonFields.toArray());
-                    embedObjects.add(jsonEmbed);
+                    jsonEmbed.put("color", rgb);
                 }
 
-                json.put("embeds", embedObjects.toArray());
+                EmbedObject.Footer footer = embed.getFooter();
+                EmbedObject.Image image = embed.getImage();
+                EmbedObject.Thumbnail thumbnail = embed.getThumbnail();
+                EmbedObject.Author author = embed.getAuthor();
+                List<EmbedObject.Field> fields = embed.getFields();
+
+                if (footer != null && !footer.equals("")) {
+                    JSONObject jsonFooter = new JSONObject();
+
+                    jsonFooter.put("text", footer.getText());
+                    jsonFooter.put("icon_url", footer.getIconUrl());
+                    jsonEmbed.put("footer", jsonFooter);
+                }
+
+                if (image != null && !image.equals("")) {
+                    JSONObject jsonImage = new JSONObject();
+
+                    jsonImage.put("url", image.getUrl());
+                    jsonEmbed.put("image", jsonImage);
+                }
+
+                if (thumbnail != null && !thumbnail.equals("")) {
+                    JSONObject jsonThumbnail = new JSONObject();
+
+                    jsonThumbnail.put("url", thumbnail.getUrl());
+                    jsonEmbed.put("thumbnail", jsonThumbnail);
+                }
+
+                if (author != null && !author.equals("")) {
+                    JSONObject jsonAuthor = new JSONObject();
+
+                    jsonAuthor.put("name", author.getName());
+                    jsonAuthor.put("url", author.getUrl());
+                    jsonAuthor.put("icon_url", author.getIconUrl());
+                    jsonEmbed.put("author", jsonAuthor);
+                }
+
+                List<JSONObject> jsonFields = new ArrayList<>();
+                for (EmbedObject.Field field : fields) {
+                    JSONObject jsonField = new JSONObject();
+
+                    jsonField.put("name", field.getName());
+                    jsonField.put("value", field.getValue());
+                    jsonField.put("inline", field.isInline());
+
+                    jsonFields.add(jsonField);
+                }
+
+                jsonEmbed.put("fields", jsonFields.toArray());
+                embedObjects.add(jsonEmbed);
             }
 
-            if (this.content != null && !this.content.equals(""))
-                json.put("content", this.content);
-
-            URL url = new URL(this.url);
-            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-            connection.addRequestProperty("Content-Type", "application/json");
-            connection.addRequestProperty("User-Agent", "Java-DiscordWebhook-BY-Gelox_");
-            connection.setDoOutput(true);
-            connection.setRequestMethod("POST");
-
-            OutputStream stream = connection.getOutputStream();
-            stream.write(json.toString().getBytes(StandardCharsets.UTF_8));
-            stream.flush();
-            stream.close();
-            connection.getInputStream().close();
-            connection.disconnect();
+            json.put("embeds", embedObjects.toArray());
         }
-        catch (IOException e) { e.printStackTrace(); }
+
+        if (this.content != null && !this.content.equals(""))
+            json.put("content", this.content);
+
+        URL url = new URL(this.url);
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        connection.addRequestProperty("Content-Type", "application/json");
+        connection.addRequestProperty("User-Agent", "Java-DiscordWebhook-BY-Gelox_");
+        connection.setDoOutput(true);
+        connection.setRequestMethod("POST");
+
+        OutputStream stream = connection.getOutputStream();
+        stream.write(json.toString().getBytes(StandardCharsets.UTF_8));
+        stream.flush();
+        stream.close();
+        connection.getInputStream().close();
+        connection.disconnect();
     }
 }
