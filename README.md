@@ -1,11 +1,11 @@
-# GDWebhook
+# Discord-Webhook
+[![Java CI with Maven](https://github.com/poyrazinan/Discord-Webhook/actions/workflows/maven.yml/badge.svg)](https://github.com/poyrazinan/Discord-Webhook/actions/workflows/maven.yml)
+[![](https://jitpack.io/v/poyrazinan/Discord-Webhook.svg)](https://jitpack.io/#poyrazinan/Discord-Webhook)
 
 Discord Webhook library which create object and execute it.
 
 ## Usage
 
-[![Java CI with Maven](https://github.com/poyrazinan/GDWebhook/actions/workflows/maven.yml/badge.svg)](https://github.com/poyrazinan/GDWebhook/actions/workflows/maven.yml)
-[![](https://jitpack.io/v/poyrazinan/GDWebhook.svg)](https://jitpack.io/#poyrazinan/GDWebhook)
 ### Maven Repo
 
 #### Repository
@@ -20,8 +20,8 @@ Discord Webhook library which create object and execute it.
 ```xml
 <dependency>
     <groupId>com.github.poyrazinan</groupId>
-    <artifactId>GDWebhook</artifactId>
-    <version>1.0.0</version>
+    <artifactId>Discord-Webhook</artifactId>
+    <version>1.0.3</version>
 </dependency>
 ```
 
@@ -32,7 +32,7 @@ maven { url 'https://jitpack.io' }
 ```
 #### Dependency
 ```
-implementation 'com.github.poyrazinan:GDWebhook:1.0.0'
+implementation 'com.github.poyrazinan:Discord-Webhook:1.0.3'
 ```
 
 ### Code Example
