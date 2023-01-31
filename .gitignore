@@ -1,4 +1,8 @@
 .idea
 /src/test
+/.idea
+.gitattributes
+/src/main/java/xyz/geik/webhook/discord/Test.java
 /target
+.DS_Store
 .DS_Store

@@ -1,7 +1,8 @@
 package xyz.geik.webhook.discord;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import xyz.geik.webhook.discord.utils.EmbedObject;
 import xyz.geik.webhook.discord.utils.JSONObject;
 
@@ -9,19 +10,23 @@ import javax.net.ssl.HttpsURLConnection;
 import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main webhook object class
+ */
 @Setter
 @Getter
 public class Webhook implements Cloneable {
 
-    List<EmbedObject> embeds = new ArrayList<>();
+    // Embeds of webhook
+    private List<EmbedObject> embeds = new ArrayList<>();
 
-    String dataId, url, userName, photoUrl, content;
+    // Variables of webhook
+    private String dataId, url, userName, photoUrl, content;
 
     public Webhook(String dataId, String url, String userName, String photoUrl,
                    String thumbnail, String title, String author,
@@ -40,6 +45,12 @@ public class Webhook implements Cloneable {
                 .setFooter(footer, "")
                 .setUrl(webUrl));
     }
+
+    /**
+     * Clones webhook
+     *
+     * @return
+     */
     public Webhook clone() {
         try {
             return (Webhook) super.clone();
@@ -48,10 +59,18 @@ public class Webhook implements Cloneable {
         }
     }
 
+    /**
+     * Adds embed
+     *
+     * @param embed
+     */
     public void addEmbed(EmbedObject embed) {
         this.embeds.add(embed);
     }
 
+    /**
+     * Webhook color enum
+     */
     public enum GColor {
         ORANGE,
         RED,
@@ -63,7 +82,14 @@ public class Webhook implements Cloneable {
         BLUE
     }
 
-    private static Color getColor(GColor color) {
+    /**
+     * Converts GColor to normal color
+     *
+     * @param color
+     * @return
+     */
+    @Contract(pure = true)
+    private static Color getColor(@NotNull GColor color) {
         Color color1 = Color.BLUE;
         switch (color) {
             case ORANGE:
@@ -94,6 +120,11 @@ public class Webhook implements Cloneable {
         return color1;
     }
 
+    /**
+     * Executes webhook to discord
+     *
+     * @throws IOException
+     */
     public void execute() throws IOException {
         if (this.content == null && this.embeds.isEmpty()) {
             throw new IllegalArgumentException("Set content or add at least one EmbedObject");
