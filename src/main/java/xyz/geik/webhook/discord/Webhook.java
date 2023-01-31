@@ -1,8 +1,6 @@
 package xyz.geik.webhook.discord;
 
 import lombok.*;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import xyz.geik.webhook.discord.utils.EmbedObject;
 import xyz.geik.webhook.discord.utils.JSONObject;
 
@@ -88,8 +86,7 @@ public class Webhook implements Cloneable {
      * @param color
      * @return
      */
-    @Contract(pure = true)
-    private static Color getColor(@NotNull GColor color) {
+    private static Color getColor(GColor color) {
         Color color1 = Color.BLUE;
         switch (color) {
             case ORANGE:
